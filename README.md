@@ -1,4 +1,4 @@
-# LogLens
+# SSH log analyzer
 
 A small Python tool that reads a Linux authentication log (`auth.log`) and finds signs of brute-force login attempts, such as someone guessing passwords again and again. It prints a clear report and saves a CSV file.
 
