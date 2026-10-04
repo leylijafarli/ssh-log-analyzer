@@ -30,31 +30,32 @@ The tool prints the report in the terminal and also writes `security_report.csv`
 ## Example output
 
 ```
-summary:  
-Total failed attempts: 38
+Summary:
+Total failed attempts: 8
 Total successful logins: 2
-Unique IP addresses: 4
-Unique targeted usernames: 8
-Suspicious IP addresses: 3
+Unique IP addresses: 2
+Unique targeted usernames: 4
+Suspicious IP addresses: 2
 
-suspicious ip adresses
+Suspicious IP addresses:
 
-[critical]
+[high]
 IP address: 192.0.2.99
-Users: root
-Failed attempts: 22
+Users: admin, root, test
+Failed attempts: 5
 First seen: Oct 5 03:00:30
-Last seen: Oct 5 03:42:30
-
-[medium]
-IP address: 203.0.113.5
-Users: admin, oracle, pi, root, test, ubuntu
-Failed attempts: 8
-First seen: Oct 4 12:01:10
-Last seen: Oct 4 12:01:31
-Tried many different usernames (6)
+Last seen: Oct 5 03:00:34
+Tried many different usernames (3)
 Possible brute-force attack: 5+ attempts within 60 seconds
 Successful login AFTER the failed attempts (users: root)
+
+[high]
+IP address: 198.51.100.7
+Users: pi
+Failed attempts: 3
+First seen: Oct 5 04:00:01
+Last seen: Oct 5 04:00:03
+Successful login AFTER the failed attempts (users: pi)
 ```
 
 ## Settings
