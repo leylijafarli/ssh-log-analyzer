@@ -3,51 +3,62 @@ import re
 import sys
 from datetime import datetime
 
-
-
-THRESHOLD = 5        
-RAPID_ATTEMPTS = 5    
-TIME_WINDOW = 60          
-MANY_USERNAMES = 3        
-HIGH_SEVERITY = 10    
-CRITICAL_SEVERITY = 20    
+THRESHOLD = 5
+RAPID_ATTEMPTS = 5
+TIME_WINDOW = 60
+MANY_USERNAMES = 3
+HIGH_SEVERITY = 10
+CRITICAL_SEVERITY = 20
+LOGIN_AFTER_MIN_FAILS = 3
 REPORT_FILENAME = "security_report.csv"
-
 
 YEAR = datetime.now().year
 
 failed_pattern = re.compile(
     r"Failed password for (?:invalid user )?(\S+) from (\S+)"
 )
+
 success_pattern = re.compile(
     r"Accepted (?:password|publickey) for (\S+) from (\S+)"
 )
 
+iso_time_pattern = re.compile(r"^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}:\d{2})")
+
 
 def parse_time(line):
+    iso = iso_time_pattern.match(line)
+    if iso:
+        time_text = f"{iso.group(1)} {iso.group(2)}"
+        try:
+            return time_text, datetime.strptime(time_text, "%Y-%m-%d %H:%M:%S")
+        except ValueError:
+            return time_text, None
+
     words = line.split()
     time_text = " ".join(words[:3])
+
     try:
         timestamp = datetime.strptime(
             f"{YEAR} {time_text}", "%Y %b %d %H:%M:%S"
         )
     except ValueError:
         timestamp = None
+
     return time_text, timestamp
 
 
 def read_log(filename):
     data = {
-        "failed_count": {},    
-        "failed_names": {},   
-        "names_by_ip": {},     
-        "first_seen": {},     
-        "last_seen": {},   
-        "failed_times": {},  
-        "success_events": {}, 
+        "failed_count": {},
+        "failed_names": {},
+        "names_by_ip": {},
+        "first_seen": {},
+        "last_seen": {},
+        "failed_times": {},
+        "success_events": {},
     }
 
-    with open(filename, "r") as file:
+    with open(filename, "r", errors="replace") as file:
         for line in file:
             if "Failed password" in line:
                 match = failed_pattern.search(line)
@@ -62,7 +73,6 @@ def read_log(filename):
                     data["failed_names"].get(username, 0) + 1
                 )
                 data["names_by_ip"].setdefault(ip, set()).add(username)
-
                 data["first_seen"].setdefault(ip, time_text)
                 data["last_seen"][ip] = time_text
 
@@ -92,7 +102,6 @@ def get_severity(count):
 
 
 def has_rapid_attempts(timestamps):
-
     timestamps = sorted(timestamps)
 
     for i in range(len(timestamps)):
@@ -100,6 +109,7 @@ def has_rapid_attempts(timestamps):
 
         for j in range(i + 1, len(timestamps)):
             difference = (timestamps[j] - timestamps[i]).total_seconds()
+
             if difference <= TIME_WINDOW:
                 attempts_in_window += 1
             else:
@@ -118,9 +128,11 @@ def logins_after_failures(ip, data):
 
     first_failure = min(failed)
     users = set()
+
     for timestamp, username in data["success_events"].get(ip, []):
         if timestamp is not None and timestamp > first_failure:
             users.add(username)
+
     return sorted(users)
 
 
@@ -134,14 +146,23 @@ def analyze(data):
     )
 
     for ip, count in ranked:
-        if count < THRESHOLD:
+        if count >= LOGIN_AFTER_MIN_FAILS:
+            after = logins_after_failures(ip, data)
+        else:
+            after = []
+
+        if count < THRESHOLD and not after:
             continue
+
+        severity = get_severity(count)
+        if after and severity == "medium":
+            severity = "high"
 
         usernames = sorted(data["names_by_ip"][ip])
 
         rows.append({
             "IP": ip,
-            "Severity": get_severity(count),
+            "Severity": severity,
             "Failed Attempts": count,
             "Users": ", ".join(usernames),
             "First Seen": data["first_seen"][ip],
@@ -150,7 +171,7 @@ def analyze(data):
             "Rapid Brute Force": has_rapid_attempts(
                 data["failed_times"].get(ip, [])
             ),
-            "Login After Failures": ", ".join(logins_after_failures(ip, data)),
+            "Login After Failures": ", ".join(after),
         })
 
     return rows
@@ -160,14 +181,14 @@ def print_report(data, rows):
     total_attempts = sum(data["failed_count"].values())
     total_successes = sum(len(v) for v in data["success_events"].values())
 
-    print("summary:")
+    print("Summary:")
     print(f"Total failed attempts: {total_attempts}")
     print(f"Total successful logins: {total_successes}")
     print(f"Unique IP addresses: {len(data['failed_count'])}")
     print(f"Unique targeted usernames: {len(data['failed_names'])}")
     print(f"Suspicious IP addresses: {len(rows)}")
 
-    print("\nsuspicious ip adresses")
+    print("\nSuspicious IP addresses:")
     if not rows:
         print("None found.")
 
@@ -199,7 +220,7 @@ def print_report(data, rows):
                 f"(users: {row['Login After Failures']})"
             )
 
-    print("\nmost targeted usernames")
+    print("\nMost targeted usernames:")
     ranked_names = sorted(
         data["failed_names"].items(),
         key=lambda item: item[1],
@@ -208,9 +229,10 @@ def print_report(data, rows):
     for username, count in ranked_names:
         print(f"{username}: {count} failed attempts")
 
-    print("\nsuccessful logins")
+    print("\nSuccessful logins:")
     if not data["success_events"]:
         print("None found.")
+
     for ip, events in data["success_events"].items():
         users = ", ".join(sorted({username for _, username in events}))
         print(f"IP: {ip} | Successful logins: {len(events)} | Users: {users}")
@@ -246,6 +268,9 @@ def main():
         data = read_log(filename)
     except FileNotFoundError:
         print(f"{filename} not found")
+        sys.exit(1)
+    except (PermissionError, IsADirectoryError):
+        print(f"Cannot read {filename}")
         sys.exit(1)
 
     rows = analyze(data)
