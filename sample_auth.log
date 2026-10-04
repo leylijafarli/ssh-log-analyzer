@@ -1,0 +1,40 @@
+Oct  4 08:00:00 server sshd[2222]: Accepted password for alice from 198.51.100.7 port 40000 ssh2
+Oct  4 09:15:00 server sshd[1234]: Failed password for alice from 198.51.100.7 port 52000 ssh2
+Oct  4 11:15:00 server sshd[1234]: Failed password for alice from 198.51.100.7 port 52000 ssh2
+Oct  4 12:01:10 server sshd[1234]: Failed password for root from 203.0.113.5 port 52000 ssh2
+Oct  4 12:01:13 server sshd[1234]: Failed password for invalid user admin from 203.0.113.5 port 52000 ssh2
+Oct  4 12:01:16 server sshd[1234]: Failed password for invalid user test from 203.0.113.5 port 52000 ssh2
+Oct  4 12:01:19 server sshd[1234]: Failed password for invalid user oracle from 203.0.113.5 port 52000 ssh2
+Oct  4 12:01:22 server sshd[1234]: Failed password for invalid user ubuntu from 203.0.113.5 port 52000 ssh2
+Oct  4 12:01:25 server sshd[1234]: Failed password for root from 203.0.113.5 port 52000 ssh2
+Oct  4 12:01:28 server sshd[1234]: Failed password for invalid user admin from 203.0.113.5 port 52000 ssh2
+Oct  4 12:01:31 server sshd[1234]: Failed password for invalid user pi from 203.0.113.5 port 52000 ssh2
+Oct  4 12:02:00 server sshd[2222]: Accepted password for root from 203.0.113.5 port 40000 ssh2
+Oct  4 13:15:00 server sshd[1234]: Failed password for alice from 198.51.100.7 port 52000 ssh2
+Oct  4 14:00:00 server sshd[1234]: Failed password for bob from 192.0.2.10 port 52000 ssh2
+Oct  4 14:05:00 server sshd[1234]: Failed password for bob from 192.0.2.10 port 52000 ssh2
+Oct  4 15:15:00 server sshd[1234]: Failed password for alice from 198.51.100.7 port 52000 ssh2
+Oct  4 17:15:00 server sshd[1234]: Failed password for alice from 198.51.100.7 port 52000 ssh2
+Oct  4 19:15:00 server sshd[1234]: Failed password for alice from 198.51.100.7 port 52000 ssh2
+Oct  5 03:00:30 server sshd[1234]: Failed password for root from 192.0.2.99 port 52000 ssh2
+Oct  5 03:02:30 server sshd[1234]: Failed password for root from 192.0.2.99 port 52000 ssh2
+Oct  5 03:04:30 server sshd[1234]: Failed password for root from 192.0.2.99 port 52000 ssh2
+Oct  5 03:06:30 server sshd[1234]: Failed password for root from 192.0.2.99 port 52000 ssh2
+Oct  5 03:08:30 server sshd[1234]: Failed password for root from 192.0.2.99 port 52000 ssh2
+Oct  5 03:10:30 server sshd[1234]: Failed password for root from 192.0.2.99 port 52000 ssh2
+Oct  5 03:12:30 server sshd[1234]: Failed password for root from 192.0.2.99 port 52000 ssh2
+Oct  5 03:14:30 server sshd[1234]: Failed password for root from 192.0.2.99 port 52000 ssh2
+Oct  5 03:16:30 server sshd[1234]: Failed password for root from 192.0.2.99 port 52000 ssh2
+Oct  5 03:18:30 server sshd[1234]: Failed password for root from 192.0.2.99 port 52000 ssh2
+Oct  5 03:20:30 server sshd[1234]: Failed password for root from 192.0.2.99 port 52000 ssh2
+Oct  5 03:22:30 server sshd[1234]: Failed password for root from 192.0.2.99 port 52000 ssh2
+Oct  5 03:24:30 server sshd[1234]: Failed password for root from 192.0.2.99 port 52000 ssh2
+Oct  5 03:26:30 server sshd[1234]: Failed password for root from 192.0.2.99 port 52000 ssh2
+Oct  5 03:28:30 server sshd[1234]: Failed password for root from 192.0.2.99 port 52000 ssh2
+Oct  5 03:30:30 server sshd[1234]: Failed password for root from 192.0.2.99 port 52000 ssh2
+Oct  5 03:32:30 server sshd[1234]: Failed password for root from 192.0.2.99 port 52000 ssh2
+Oct  5 03:34:30 server sshd[1234]: Failed password for root from 192.0.2.99 port 52000 ssh2
+Oct  5 03:36:30 server sshd[1234]: Failed password for root from 192.0.2.99 port 52000 ssh2
+Oct  5 03:38:30 server sshd[1234]: Failed password for root from 192.0.2.99 port 52000 ssh2
+Oct  5 03:40:30 server sshd[1234]: Failed password for root from 192.0.2.99 port 52000 ssh2
+Oct  5 03:42:30 server sshd[1234]: Failed password for root from 192.0.2.99 port 52000 ssh2
