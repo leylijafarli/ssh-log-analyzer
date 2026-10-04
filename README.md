@@ -12,4 +12,4 @@ A robust, modular Python utility designed to parse SSH authentication logs, dete
 Run the script from your terminal by passing the log file as an argument:
 
 ```bash
-python loglens.py
+python loglens.py <logfile>
