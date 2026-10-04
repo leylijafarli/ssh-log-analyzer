@@ -216,7 +216,7 @@ def print_report(data, rows):
 
         if row["Login After Failures"]:
             print(
-                f"[WARNING] Successful login AFTER the failed attempts "
+                f"Successful login AFTER the failed attempts "
                 f"(users: {row['Login After Failures']})"
             )
 
